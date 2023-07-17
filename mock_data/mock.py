@@ -1,11 +1,14 @@
+
 """The Mock class controls the generation of mock sensor data.
 
 Wind and water-current data (direction and speed) are simulated randomly here. 
 The data is validated and then saved to CSV for use by the main program"""
 
+
 import random
 import config
 import api
+
 
 class Mock:
     class Cluster:
@@ -29,7 +32,7 @@ class Mock:
         self.time: int = 0
 
     def set_defaults(self):
-        self.wind.heading = 90
+        self.wind.heading = 0
         self.wind.speed = 1
         self.water.heading = 110
         self.water.speed = 1
@@ -62,3 +65,5 @@ class Mock:
         self.update_wind(heading=random.randint(-1,1), speed=random.randint(-1,1))
         self.update_water(heading=random.randint(-2,2), speed=random.randint(-1,1))
         api.send_instruments(self.get_row())
+
+

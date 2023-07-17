@@ -1,6 +1,8 @@
+
 import csv
 import datetime
 import pandas as pd
+
 
 def inits():
     headings = ["lat/long", "date"]
@@ -53,3 +55,5 @@ def fetch_coordinates():
             lat.append(float(row[0]))
             long.append(float(row[1]))
         return lat, long
+
+

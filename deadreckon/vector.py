@@ -1,3 +1,4 @@
+
 """The Vector class is full of convenience functions.
 
 Like names, and multiple creation modalities."""
@@ -69,7 +70,7 @@ class Vector:
 
 
     def function(self) -> tuple:
-        return self._to[0] - self._from[0], self._to[1] - self._from[1]
+        return tuple(np.subtract(self._to, self._from))
 
     def line_from(self, new_tail: tuple):
         self._to = tuple(np.add(self.function(), new_tail))
@@ -90,3 +91,5 @@ class Vector:
         else:
             string = f"Vector: { self._from } -> { self._to }"
         return string
+
+

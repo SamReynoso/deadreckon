@@ -17,7 +17,6 @@ def coord_encoder(_seconds: float) -> str:
     degree_minute_second_str = f"{ degrees }°{ minutes }'{seconds }\""
     return degree_minute_second_str
 
-
 def from_coord_string(cooredanet_str: str):
     lat_string, north, long_string, east = cooredanet_str.split(" ")
     lat_seconds = coord_parser(lat_string)
@@ -30,7 +29,7 @@ def from_coord_string(cooredanet_str: str):
 
 def gen_coord_str(location):
     lat_seconds, long_seconds = location
-    if long_seconds >= 0:
+    if lat_seconds >= 0:
         ns = "N"
     else:
         ns = "S"
@@ -41,3 +40,5 @@ def gen_coord_str(location):
     lat_string = coord_encoder(lat_seconds)
     long_string = coord_encoder(long_seconds)
     return  f"{ lat_string } { ns } {long_string } { ew }"
+
+

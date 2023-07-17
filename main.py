@@ -1,3 +1,4 @@
+
 import config
 from mock_data.mock import Mock
 from cli import cli
@@ -32,3 +33,5 @@ if __name__ == "__main__":
     MOCK = Mock()
     MOCK.set_defaults()
     main()
+
+

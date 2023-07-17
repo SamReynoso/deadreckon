@@ -1,3 +1,4 @@
+
 """Data from the clusterpanel is used to calculate drift and compensatory craft heading"""
 
 
@@ -7,6 +8,7 @@ from deadreckon.clusterpanel import ClusterPanel
 from deadreckon.vector import Vector
 import config
 from cli import cli
+
 
 class DeadReckon:
     time = 0
@@ -59,12 +61,12 @@ class VectorHandler:
     def find_crosswind(self):
         wn = self.wind
         tar = self.target
-        if self.wind.mag != 0 and tar.mag != 0:
+        if wn.mag != 0 and tar.mag != 0:
             dot = np.dot(wn.function(), tar.function())
             scale = dot / tar.mag
             projection = [ (point / tar.mag) * scale for point in tar.function() ]
             self.crosswind = Vector(name="crosswind").from_point(
-                (self.wind._to[0] - projection[0], self.wind._to[1] - projection[1])
+                tuple(np.subtract(wn.function(), projection))
             )
         else:
             self.crosswind = Vector(name="crosswind")
@@ -74,13 +76,14 @@ class VectorHandler:
         self.windtravel.line_from(self.water._to)
 
     def gen_drift(self):
-        trav = self.windtravel._to
-        tar = self.target.function()
-        dot = np.dot(trav, tar)
+        trav = self.windtravel
+        tar = self.target
+        dot = np.dot(trav.function(), tar.function())
         scale = dot / self.target.mag
-        projection = [ (point / self.target.mag) * scale for point in tar ]
-        drift_point = trav[0] - projection[0], trav[1] - projection[1]
-        self.drift = Vector(name="drift").from_point(drift_point)
+        projection = [ (point / tar.mag) * scale for point in tar.function() ]
+        self.drift = Vector(name="drift").from_point(
+            tuple(np.subtract(trav.function(), projection))
+        )
 
     def gen_craft(self, craft_mag):
         if craft_mag == 0:
@@ -109,3 +112,5 @@ class VectorHandler:
                 thetaA,
                 self.craft
                 )
+
+

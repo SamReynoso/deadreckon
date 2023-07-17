@@ -1,3 +1,4 @@
+
 """Vectors, that are in meters, get transmogrified into lat and long coordinates here."""
 
 
@@ -8,6 +9,7 @@ from deadreckon.deadreckon import DeadReckon
 from deadreckon.vector import Vector
 from deadreckon.coordhandlers import gen_coord_str
 import config
+
 
 def second_to_degree(val: int):
     return val / 3_600
@@ -47,8 +49,8 @@ class GPS:
         long_delta = c(self.destination[1] - self.location[1])
         lat_delta = lat2 - lat1
 
-        a = pow(np.sin(lat_delta/2), 2) + (np.cos(lat1))*np.cos(lat2)*pow((long_delta/2),2)
-        d = 2*6_371_000*np.arctan2(np.sqrt(a), np.sqrt(1-a))
+        a = np.sin(lat_delta/2)**2 + (np.cos(lat1))*np.cos(lat2)*(long_delta/2)**2
+        d = 2 * 6_371_000 * np.arctan2(np.sqrt(a), np.sqrt(1-a))
         return d
 
     def calc_heading(self):
@@ -85,16 +87,17 @@ class GPS:
         return translated
 
     def save_csv(self, ):
-        craft_csv_data = self.craft_speed, np.round(radian_to_degree(self.vectors[-1].theta), 1)
+        craft_vector = self.vectors[-1]
+        assert craft_vector.name == "craft"
+        craft_csv_data = self.craft_speed, np.round(radian_to_degree(craft_vector.theta), 1)
         coord_string = gen_coord_str(self.location) 
         api.update_craft(craft_csv_data)
         api.send_coord([coord_string])
 
 
-
 def convert(vector: Vector, lat_seconds):
     lat_scaler, long_scaler = get_meter_scaler(lat_seconds)
-    converter = lambda x: (x[0] * lat_scaler, x[1] * long_scaler)
+    converter = lambda x: tuple(np.multiply(x,(lat_scaler, long_scaler)))
     tail = converter(vector._from)
     head = converter(vector._to)
     vector._from = tail
@@ -102,9 +105,11 @@ def convert(vector: Vector, lat_seconds):
     return vector
 
 def shift(vector: Vector, location):
-    shift = lambda x: (x[0] + location[0], x[1] + location[1])
+    shift = lambda x: tuple(np.add(x, location))
     tail = shift(vector._from)
     head = shift(vector._to)
     vector._from = tail
     vector._to = head
     return vector
+
+

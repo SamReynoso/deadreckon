@@ -1,3 +1,4 @@
+
 from deadreckon.coordhandlers import from_coord_string
 
 
@@ -25,3 +26,5 @@ DESTINATION = from_coord_string(END)
 
 CRAFT_SPEED = 3
 LIMIT= 200
+
+

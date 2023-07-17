@@ -1,6 +1,8 @@
+
 """CSV data is parsed here with compass headings being reversed and rotated 90 degrees.
 
 Compass bearings start with 0 at top (typically 90) and increses in the clockwise direction."""
+
 
 class Cluster:
     def __init__(self):

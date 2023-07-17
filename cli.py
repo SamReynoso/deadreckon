@@ -1,4 +1,6 @@
+
 """Quick cli that was thrown together."""
+
 
 import os
 import numpy as np
