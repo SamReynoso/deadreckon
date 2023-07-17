@@ -48,7 +48,6 @@ class GPS:
         d = 2*6_371_000*np.arctan2(np.sqrt(a), np.sqrt(1-a))
         return d
 
-
     def calc_heading(self):
         c = lambda x: degree_to_radian(second_to_degree(x))
         long_delta = c( self.destination[1] - self.location[1] )

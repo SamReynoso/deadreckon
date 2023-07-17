@@ -1,15 +1,17 @@
 from deadreckon.coordhandlers import from_coord_string
 
 
-DEBUG = False
+DEBUG = True
 if DEBUG:
-    ELAPSE = 1200
+    ELAPSE = 3_600
     PAUSE = 1.5
-elif not DEBUG:
+elif DEBUG is False:
     ELAPSE = 600
-    PAUSE = .05
+    PAUSE = .5
 
-STOP_AT_COMPLETION = False
+
+STOP_AT_COMPLETION = True
+WITHIN_TARGET = 1_000
 
 class Case:
     one = "40°43'32\" N 50°56'49\" W", "41°43'32\" N 49°56'49\" W"
@@ -17,9 +19,9 @@ class Case:
     three = "41°43'32\" N 50°56'49\" W", "40°43'32\" N 49°56'49\" W"
     four = "40°43'32\" N 49°56'49\" W", "41°43'32\" N 50°56'49\" W"
 
-BEGINNING, END = Case().four
+BEGINNING, END = Case().one
 ORIGIN = from_coord_string(BEGINNING)
 DESTINATION = from_coord_string(END)
 
-CRAFT_SPEED = 10
-LIMIT= 1000
+CRAFT_SPEED = 3
+LIMIT= 200

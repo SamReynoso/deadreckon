@@ -34,7 +34,6 @@ class ClusterPanel:
         Wind - Speed: {self.wind.speed} - Heading: {self.wind.heading}
         Water - Speed: {self.water.speed} - Heading: {self.water.heading}
         Craft - Speed: {self.craft.speed} - Heading: {self.craft.heading}
-
                 """
 
 

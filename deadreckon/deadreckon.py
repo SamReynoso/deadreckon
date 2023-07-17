@@ -21,6 +21,7 @@ class DeadReckon:
         self.vectors.update(clusterpanel, time_delta)
         self.vectors.find_crosswind()
         self.vectors.gen_windtravel()
+        self.vectors.gen_drift()
         self.vectors.gen_craft(craft_mag)
         return self
     
@@ -28,10 +29,10 @@ class DeadReckon:
         if config.DEBUG:
             return [
                 self.vectors.target,
-                #self.vectors.wind, self.vectors.water,
-                #self.vectors.crosswind, 
-                #self.vectors.windtravel,
-                self.vectors.e,
+                self.vectors.wind, self.vectors.water,
+                self.vectors.crosswind, 
+                self.vectors.windtravel,
+                self.vectors.drift,
                 self.vectors.craft
             ]
         return[
@@ -70,38 +71,39 @@ class VectorHandler:
         self.windtravel = self.copy(self.crosswind, name="windtravel")
         self.windtravel.line_from(self.water._to)
 
+    def gen_drift(self):
+        trav = self.windtravel._to
+        tar = self.target.function()
+        dot = np.dot(trav, tar)
+        scale = dot / self.target.mag
+        projection = [ (point / self.target.mag) * scale for point in tar ]
+        drift_point = trav[0] - projection[0], trav[1] - projection[1]
+        self.drift = Vector(name="drift").from_point(drift_point)
+
     def gen_craft(self, craft_mag):
         if craft_mag == 0:
             self.craft = Vector(name="craft").from_point((0,0))
-            self.e = Vector(name="e").from_point((0,0))
-        else:
-            trav = self.windtravel._to
-            tar = self.target.function()
-            dot = np.dot(trav, tar)
-            scale = dot / self.target.mag
-            projection = [ (point / self.target.mag) * scale for point in tar ]
-            ep = trav[0] - projection[0], trav[1] - projection[1]
-            self.e = Vector(name="e").from_point(ep)   
-
-            if self.e.mag > craft_mag:
-                cli.readout.unreachable()
-                craft_theta = self.e.theta
-                thetaA = 0
+            thetaA = 0
+        else:    
+            if self.drift.mag > craft_mag:
+                    cli.readout.unreachable()
+                    craft_theta = self.target.theta
+                    thetaA = 0
             else:
-                thetaA = np.arccos(self.e.mag/craft_mag)
-                handedness = ((self.target.theta - self.e.theta) % (2*np.pi)) / (np.pi/2)
+                thetaA = np.arccos(self.drift.mag/craft_mag)
+                handedness = ((self.target.theta - self.drift.theta) % (2*np.pi)) / (np.pi/2)
                 if handedness < 0 or handedness > 2:
-                    craft_theta = self.e.theta - (np.pi - thetaA)
+                    craft_theta = self.drift.theta - (np.pi - thetaA)
                 else:
-                    craft_theta = self.e.theta + (np.pi - thetaA)
-
+                    craft_theta = self.drift.theta + (np.pi - thetaA)
             self.craft = Vector(name="craft").from_theta(craft_mag, craft_theta)
-            self.craft.line_from(trav)
-            if config.DEBUG:
-                cli.readout.craft_info(
-                    self.target,
-                    Vector(name="travel").from_point(trav), 
-                    self.e,
-                    thetaA,
-                    self.craft
-                    )
+            self.craft.line_from(self.windtravel._to)
+
+        if config.DEBUG:
+            cli.readout.craft_info(
+                self.target,
+                Vector(name="travel").from_point(self.windtravel._to), 
+                self.drift,
+                thetaA,
+                self.craft
+                )

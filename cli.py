@@ -1,7 +1,8 @@
+"""Quick cli that was thrown together."""
+
 import os
 import numpy as np
-
-from colorama import Fore, Back, Style
+from colorama import Fore, Style
 
 import config
 from deadreckon.vector import Vector
@@ -149,18 +150,6 @@ class Cli:
 
 
 cli = Cli()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

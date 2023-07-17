@@ -1,7 +1,10 @@
-import random
+"""The Mock class controls the generation of mock sensor data.
 
+Wind and water-current data (direction and speed) are simulated randomly here. 
+The data is validated and then saved to CSV for use by the main program"""
+
+import random
 import config
-from deadreckon.coordhandlers import from_coord_string
 import api
 
 class Mock:
@@ -34,13 +37,6 @@ class Mock:
         self.craft.speed = 0
         api.send_instruments(self.get_row())
 
-
-    def next(self) -> list:
-        self.time += config.ELAPSE
-        self.update_wind(heading=random.randint(-1,1), speed=random.randint(-1,1))
-        self.update_water(heading=random.randint(-2,2), speed=random.randint(-1,1))
-        api.send_instruments(self.get_row())
-
     def get_row(self):
         return [
             self.wind.speed, self.wind.heading,
@@ -60,3 +56,9 @@ class Mock:
             speed = 5
         self.water.update_heading(heading)
         self.water.update_speed(speed)
+
+    def next(self) -> list:
+        self.time += config.ELAPSE
+        self.update_wind(heading=random.randint(-1,1), speed=random.randint(-1,1))
+        self.update_water(heading=random.randint(-2,2), speed=random.randint(-1,1))
+        api.send_instruments(self.get_row())
