@@ -1,3 +1,8 @@
+"""Converts between string format and digital format.
+
+(Degrees North/South, Degrees East/West) <--> +-float, +-float """
+
+
 def coord_parser(degree_minute_second_str: str) -> float:
     degrees, m_s = degree_minute_second_str.split("°")
     minutes, seconds_dirty = m_s.split("'")

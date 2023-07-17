@@ -1,7 +1,7 @@
 from deadreckon.coordhandlers import from_coord_string
 
 
-DEBUG = True
+DEBUG = False
 if DEBUG:
     ELAPSE = 3_600
     PAUSE = 1.5

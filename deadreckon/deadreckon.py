@@ -1,3 +1,5 @@
+"""Data from the clusterpanel is used to calculate drift and compensatory craft heading"""
+
 
 import numpy as np
 import copy
@@ -65,7 +67,7 @@ class VectorHandler:
                 (self.wind._to[0] - projection[0], self.wind._to[1] - projection[1])
             )
         else:
-            self.crosswind = Vector(name="crosswind").from_point((0,0))
+            self.crosswind = Vector(name="crosswind")
     
     def gen_windtravel(self):
         self.windtravel = self.copy(self.crosswind, name="windtravel")
@@ -82,7 +84,7 @@ class VectorHandler:
 
     def gen_craft(self, craft_mag):
         if craft_mag == 0:
-            self.craft = Vector(name="craft").from_point((0,0))
+            self.craft = Vector(name="craft")
             thetaA = 0
         else:    
             if self.drift.mag > craft_mag:

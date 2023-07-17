@@ -8,8 +8,8 @@ from deadreckon.gps import GPS
 def main():
         cli.clear()
         origin, destination, craft_speed, limit, selection = cli.run()
-        suc = False
         if selection == "r":
+            suc = False
             cli.clear()
             gps = GPS(origin, destination, craft_speed)
             for i in range(limit):
@@ -23,8 +23,8 @@ def main():
                         break
                 MOCK.next()
                 cli.clear()
-        if suc:
-            cli.success()
+            if suc:
+                cli.success()
         cli.clear()
 
 

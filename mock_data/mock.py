@@ -29,7 +29,7 @@ class Mock:
         self.time: int = 0
 
     def set_defaults(self):
-        self.wind.heading = 0
+        self.wind.heading = 90
         self.wind.speed = 1
         self.water.heading = 110
         self.water.speed = 1

@@ -1,3 +1,6 @@
+"""Vectors, that are in meters, get transmogrified into lat and long coordinates here."""
+
+
 import numpy as np
 import api
 from deadreckon.clusterpanel import ClusterPanel
@@ -41,8 +44,8 @@ class GPS:
         c = lambda x: degree_to_radian(second_to_degree(x))
         lat1 = c(self.location[0])
         lat2 = c(self.destination[0])
-        long_delta = c(self.destination[0] - self.location[0])
-        lat_delta = c(lat2 - lat1)
+        long_delta = c(self.destination[1] - self.location[1])
+        lat_delta = lat2 - lat1
 
         a = pow(np.sin(lat_delta/2), 2) + (np.cos(lat1))*np.cos(lat2)*pow((long_delta/2),2)
         d = 2*6_371_000*np.arctan2(np.sqrt(a), np.sqrt(1-a))
@@ -65,7 +68,7 @@ class GPS:
         self.deadreckon.update(self.craft_speed, self.calc_mag(), self.calc_heading())
         self.deadreckon.run(clusterpanel)
         self.vectors = self.translate()
-        if not config.DEBUG:
+        if config.DEBUG is False:
             craft = self.vectors[-1]
             if craft.name == "craft":
                 self.location = craft._to
@@ -76,7 +79,7 @@ class GPS:
             return vectors
         translated = []
         for vector in vectors:
-            vector = convert(vector, self.location[1])
+            vector = convert(vector, self.location[0])
             vector = shift(vector, self.location)
             translated.append(vector)
         return translated

@@ -1,6 +1,12 @@
+"""The Vector class is full of convenience functions.
+
+Like names, and multiple creation modalities."""
+
+
 import numpy as np
 import config
 from deadreckon.clusterpanel import Cluster
+
 
 def use_trig(theta):
     if theta == 0:
@@ -28,6 +34,7 @@ class Vector:
         self.name = name
         self._from: tuple = 0, 0
         self._to: tuple = 0, 0
+        self.theta: float = 0.0
 
     def from_cluster(self, cluster: Cluster, time_delta):
         self.mag = cluster.speed * time_delta
