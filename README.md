@@ -1,5 +1,5 @@
 # Deadreckon
-It took several hours, but I prompted it out of ChatGPT.
+It took several hours, but I prompted this README.md out of ChatGPT.
 
 ## Maritime Navigation Simulation
 
